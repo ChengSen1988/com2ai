@@ -67,7 +67,7 @@ $env:C2A_SKIP_MODELS='1'; irm https://cdn.jsdelivr.net/gh/ChengSen1988/com2ai@ma
 
 > 也可以自行准备环境后按 `requirements.txt` 安装依赖（PyTorch 请按需选择 CUDA/CPU 版本），然后用 `python start.py` 启动。
 
-## 模型依赖
+## 示例中的模型依赖
 
 模型只和具体技能相关，不同技能可以依赖不同模型，甚至完全不依赖模型：
 
@@ -98,7 +98,7 @@ uploads/  vector_memory/  chat.db  运行时数据（不入库，见 .gitignore�
 
 ## 数据与隐私
 
-所有数据均保存在本机。聊天记录、上传文件、向量库等运行时数据已被 `.gitignore` 排除，不会随仓库提交。
+所有数据均保存在本机。
 
 ## 开源许可
 
