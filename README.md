@@ -1,10 +1,14 @@
-# C2Achat（Com2AI AI 对话框架）
+# Com2AI ：AI chat
 
-一个本地运行的 AI 对话框架。核心是一个聊天界面 + 可插拔的「技能」（Skill）系统：技能决定了 AI 能做什么——可以是纯对话、文生图、文档分析、代码执行……完全由你自己定义。项目内置了对话和文生图两个示例技能，其余能力按需增删，不需要改框架代码。
+[English](README_EN.md) | 中文
+
+一个本地运行的 AI 对话框架。
+核心是一个聊天界面 + 可插拔的「技能」（Skill）系统：技能决定了 AI 能做什么——可以是纯对话、文生图、文档分析、代码执行……完全由你自己定义。
+项目内置了对话和文生图两个示例技能，其余能力按需增删，不需要改框架代码。
 
 ## 核心特性
 
-- **技能即插件**：`skills/` 下每个目录就是一个技能，增删改只需新建/修改文件夹，重启应用即生效
+- **技能即插件**：`skills/` 下每个目录就是一个技能，增删改只需新建/修改文件夹，刷新页面即生效
 - **UI 参数自动生成**：技能通过 `config.json` 声明参数，前端自动渲染出对应的输入控件（文本框、下拉、开关等），无需改动界面代码
 - **内置示例技能**：
   - `qwythos9b`：本地 AI 对话（Ollama，纯离线，支持带思考过程的流式输出）
@@ -31,45 +35,31 @@ skills/my_skill/
 
 ## 环境要求
 
-- Windows 10/11（脚本针对 Windows 编写）
+- Windows （脚本针对 Windows 编写）
 - 建议 NVIDIA 显卡（无显卡时自动回退 CPU）
 - 首次安装需要联网（约 5–20 分钟）
 
 ## 快速开始
 
-### 方式一：一行命令安装（推荐）
+### 方式一：一行命令安装
 
-打开 Windows PowerShell（开始菜单搜索 PowerShell），粘贴下面任意一行回车即可。脚本会自动完成：下载项目 → 部署 Python 环境与依赖 → 安装 Ollama 并下载对话/嵌入模型（约 6–8 GB）→ 启动应用。
+打开 Windows PowerShell，粘贴下面指令回车即可。脚本会自动完成：下载项目 → 部署 Python 环境与依赖 → 安装 Ollama 并下载对话/嵌入模型（约 6–8 GB）→ 启动应用。
 
-海外网络：
 
 ```powershell
 irm https://raw.githubusercontent.com/ChengSen1988/com2ai/main/install.ps1 | iex
 ```
 
-国内网络（jsDelivr CDN，无需代理）：
-
-```powershell
-irm https://cdn.jsdelivr.net/gh/ChengSen1988/com2ai@main/install.ps1 | iex
-```
-
-想跳过模型下载（之后需要时直接双击 `installandstart.bat` 即可补装）：
-
-```powershell
-$env:C2A_SKIP_MODELS='1'; irm https://cdn.jsdelivr.net/gh/ChengSen1988/com2ai@main/install.ps1 | iex
-```
-
-> 安全提示：`irm ... | iex` 会直接执行远程脚本，这是社区常见的一键安装方式，执行前请确认来源可靠。
-
 ### 方式二：手动安装
+将本仓库下载到你的电脑中，然后直接双击 `installandstart.bat`：便自动完成 Python 环境、全部依赖、Ollama 与模型下载，并启动应用。（首次约 5–30 分钟）
 
-直接双击 `installandstart.bat`：自动完成 Python 环境、全部依赖、Ollama 与模型下载，并启动应用（首次约 5–30 分钟；已安装过的机器双击即启动，无需等待）。
 
-> 也可以自行准备环境后按 `requirements.txt` 安装依赖（PyTorch 请按需选择 CUDA/CPU 版本），然后用 `python start.py` 启动。
+### 启动应用
+在本机目录中双击 `installandstart.bat`：便启动应用。
 
-## 示例中的模型依赖
 
-模型只和具体技能相关，不同技能可以依赖不同模型，甚至完全不依赖模型：
+## 示例中的技能简介
+
 
 | 用途 | 模型 | 来源 | 对应技能 |
 | --- | --- | --- | --- |
@@ -93,7 +83,7 @@ chat_history.py           对话历史数据层
 storage.py                消息持久化
 memory_store.py           向量记忆（Chroma + Ollama 嵌入）
 skill_registry.py         技能注册、加载与配置读取
-uploads/  vector_memory/  chat.db  运行时数据（不入库，见 .gitignore）
+uploads/  vector_memory/  chat.db  运行时数据
 ```
 
 ## 数据与隐私
