@@ -53,7 +53,7 @@ irm https://raw.githubusercontent.com/ChengSen1988/com2ai/main/install.ps1 | iex
 irm https://cdn.jsdelivr.net/gh/ChengSen1988/com2ai@main/install.ps1 | iex
 ```
 
-想跳过模型下载（之后需要时再手动运行 `ollamainstall.bat`）：
+想跳过模型下载（之后需要时直接双击 `installandstart.bat` 即可补装）：
 
 ```powershell
 $env:C2A_SKIP_MODELS='1'; irm https://cdn.jsdelivr.net/gh/ChengSen1988/com2ai@main/install.ps1 | iex
@@ -63,11 +63,9 @@ $env:C2A_SKIP_MODELS='1'; irm https://cdn.jsdelivr.net/gh/ChengSen1988/com2ai@ma
 
 ### 方式二：手动安装
 
-1. 运行 `01installv5.bat`：一键部署 Python 3.12 环境并安装全部依赖（含 GPU 检测）
-2. 运行 `ollamainstall.bat`：安装 Ollama 并下载对话模型与嵌入模型（约 6–8 GB）
-3. 启动：运行 `start.py`（或 `python start.py`），浏览器自动打开 `http://127.0.0.1:12457`
+直接双击 `installandstart.bat`：自动完成 Python 环境、全部依赖、Ollama 与模型下载，并启动应用（首次约 5–30 分钟；已安装过的机器双击即启动，无需等待）。
 
-> 也可以自行准备环境后按 `requirements.txt` 安装依赖（PyTorch 请按需选择 CUDA/CPU 版本）。
+> 也可以自行准备环境后按 `requirements.txt` 安装依赖（PyTorch 请按需选择 CUDA/CPU 版本），然后用 `python start.py` 启动。
 
 ## 模型依赖
 
@@ -85,6 +83,8 @@ $env:C2A_SKIP_MODELS='1'; irm https://cdn.jsdelivr.net/gh/ChengSen1988/com2ai@ma
 ## 目录结构
 
 ```text
+installandstart.bat      一键安装并启动（双击即用，含 Ollama/模型下载）
+install.ps1              一行命令安装入口（irm ... | iex）
 app.py / start.py         Web 服务入口
 skills/                   技能插件目录（每个子目录 = 一个技能）
 static/                   前端资源（HTML/JS/CSS）

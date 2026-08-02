@@ -91,27 +91,15 @@ if (Test-Path (Join-Path $InstallDir 'app.py')) {
     Write-OK "项目已安装到 $InstallDir"
 }
 
-# ---------- 2. Ollama 与对话模型 ----------
-if (-not $SkipModels) {
-    Write-Step '安装 Ollama 并下载对话/嵌入模型（约 6-8GB，请耐心等待）'
-    Push-Location $InstallDir
-    try {
-        & .\ollamainstall.bat nopause
-        if ($LASTEXITCODE -ne 0) {
-            Write-Warn '模型安装未完全成功，之后可手动运行 ollamainstall.bat 补齐'
-        }
-    } finally {
-        Pop-Location
-    }
-} else {
-    Write-Warn '已跳过模型下载；之后需要时运行安装目录下的 ollamainstall.bat 即可'
-}
-
-# ---------- 3. Python 环境与依赖，完成后自动启动 ----------
-Write-Step '安装 Python 环境与依赖（首次约 5-20 分钟），完成后自动启动应用'
+# ---------- 2. 一键安装并启动（Python 环境 + 依赖 + Ollama 模型） ----------
+$env:C2A_SKIP_MODELS = if ($SkipModels) { '1' } else { '0' }
+Write-Step '安装 Python 环境、依赖、Ollama 与模型（首次约 5-30 分钟），完成后自动启动应用'
 Push-Location $InstallDir
 try {
-    & .\01installv5.bat nopause
+    & .\installandstart.bat nopause
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warn '安装过程未完全成功，可重新运行 installandstart.bat 重试'
+    }
 } finally {
     Pop-Location
 }

@@ -1,6 +1,6 @@
 # 运行时 Python 依赖
 # 注意：torch / torchvision / torchaudio 不在列表中，
-# 请使用 01installv5.bat 安装（会自动按显卡选择 cu128 或 CPU 版本）。
+# 请使用 installandstart.bat 安装（会自动按显卡选择 cu128 或 CPU 版本）。
 flask
 opencv-python
 Pillow
