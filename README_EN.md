@@ -56,6 +56,7 @@ Download this repository to your computer, then double-click `installandstart.ba
 ### Start the app
 
 Double-click `installandstart.bat` in the local directory to start the app.
+The installer also creates a `C2Achat` desktop shortcut automatically (icon: `icon.ico` in the project root - replace it with your own design anytime).
 
 ## Example Skills Overview
 

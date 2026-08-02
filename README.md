@@ -56,6 +56,7 @@ irm https://raw.githubusercontent.com/ChengSen1988/com2ai/main/install.ps1 | iex
 
 ### 启动应用
 在本机目录中双击 `installandstart.bat`：便启动应用。
+安装或启动时还会自动在桌面创建 `C2Achat` 快捷方式（图标为项目根目录的 `icon.ico`，可自行替换）。
 
 
 ## 示例中的技能简介

@@ -504,6 +504,11 @@ echo [C2Achat] ==========================================
 :: ============================================================
 :launch
 
+:: ============================================================
+:: Create / refresh the desktop shortcut (C2Achat.lnk)
+:: ============================================================
+powershell -NoProfile -Command "$ws = New-Object -ComObject WScript.Shell; $s = $ws.CreateShortcut([Environment]::GetFolderPath('Desktop') + '\C2Achat.lnk'); $s.TargetPath = '%BASE_DIR%installandstart.bat'; $s.WorkingDirectory = '%BASE_DIR%'; $s.IconLocation = '%BASE_DIR%icon.ico'; $s.Description = 'C2Achat - AI chat framework'; $s.Save()"
+
 echo.
 echo Launching C2Achat... The browser will open automatically
 echo.
