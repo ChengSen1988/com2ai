@@ -344,4 +344,4 @@ echo.
 echo Launching C2Achat... Browser will open  / 正在启动C2Achat，浏览器将自动打开
 echo.
 "%PYTHON_EXE%" start.py
-pause
+if /I not "%~1"=="nopause" pause

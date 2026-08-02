@@ -160,4 +160,4 @@ echo.
 echo 验证安装：运行 ollama list 查看已安装的模型
 echo 运行模型：ollama run %MODEL_NAME%
 echo.
-pause
+if /I not "%~1"=="nopause" pause

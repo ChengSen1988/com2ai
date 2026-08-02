@@ -37,6 +37,32 @@ skills/my_skill/
 
 ## 快速开始
 
+### 方式一：一行命令安装（推荐）
+
+打开 Windows PowerShell（开始菜单搜索 PowerShell），粘贴下面任意一行回车即可。脚本会自动完成：下载项目 → 部署 Python 环境与依赖 → 安装 Ollama 并下载对话/嵌入模型（约 6–8 GB）→ 启动应用。
+
+海外网络：
+
+```powershell
+irm https://raw.githubusercontent.com/ChengSen1988/com2ai/main/install.ps1 | iex
+```
+
+国内网络（jsDelivr CDN，无需代理）：
+
+```powershell
+irm https://cdn.jsdelivr.net/gh/ChengSen1988/com2ai@main/install.ps1 | iex
+```
+
+想跳过模型下载（之后需要时再手动运行 `ollamainstall.bat`）：
+
+```powershell
+$env:C2A_SKIP_MODELS='1'; irm https://cdn.jsdelivr.net/gh/ChengSen1988/com2ai@main/install.ps1 | iex
+```
+
+> 安全提示：`irm ... | iex` 会直接执行远程脚本，这是社区常见的一键安装方式，执行前请确认来源可靠。
+
+### 方式二：手动安装
+
 1. 运行 `01installv5.bat`：一键部署 Python 3.12 环境并安装全部依赖（含 GPU 检测）
 2. 运行 `ollamainstall.bat`：安装 Ollama 并下载对话模型与嵌入模型（约 6–8 GB）
 3. 启动：运行 `start.py`（或 `python start.py`），浏览器自动打开 `http://127.0.0.1:12457`
