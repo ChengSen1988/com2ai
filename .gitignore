@@ -18,7 +18,6 @@ BACKUP_*.zip
 # 安装器相关
 /.install_done
 /OllamaSetup.exe
-/get-pip.py
 /python_env.zip
 /Real-ESRGAN.zip
 /patches/

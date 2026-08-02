@@ -22,7 +22,6 @@ set PIP_EXTRA_ARGS=--progress-bar on --no-warn-script-location
 :: Network mode / mirror variables (assigned in Step 1)
 set NET_MODE=GLOBAL
 set PIP_MIRROR=
-set GETPIP_URL=https://bootstrap.pypa.io/get-pip.py
 set EMBED_ZIP_URL=https://www.python.org/ftp/python/3.12.6/python-3.12.6-embed-amd64.zip
 
 :: ============================================================
@@ -60,7 +59,6 @@ if errorlevel 1 (
     echo        Switching to domestic mirrors for pip / PyTorch / downloads.
     set NET_MODE=CN
     set PIP_MIRROR=-i https://mirrors.aliyun.com/pypi/simple
-    set GETPIP_URL=https://mirrors.aliyun.com/pypi/get-pip.py
     set EMBED_ZIP_URL=https://registry.npmmirror.com/-/binary/python/3.12.6/python-3.12.6-embed-amd64.zip
 ) else (
     echo [OK] Google is reachable. Using official sources ^(overseas network^).
@@ -101,15 +99,16 @@ if exist "%PTH_FILE%" (
 ) else ( echo [WARN] pth file not found, skipping )
 
 :: Step 4: Install pip
+:: get-pip.py is bundled with the repo (official latest, works on Python 3.12).
+:: If pip is already available, skip the bootstrap entirely.
 echo.
 echo [Step 4/6] Installing pip...
-if not exist "%GETPIP%" (
-    echo Downloading get-pip.py from !GETPIP_URL!...
-    powershell -NoProfile -Command "Invoke-WebRequest -Uri '!GETPIP_URL!' -OutFile '%GETPIP%'"
-    if errorlevel 1 ( echo [ERROR] Failed to download get-pip.py & pause & exit /b 1 )
+"%PYTHON_EXE%" -m pip --version >nul 2>&1
+if errorlevel 1 (
+    if not exist "%GETPIP%" ( echo [ERROR] get-pip.py not found & pause & exit /b 1 )
+    "%PYTHON_EXE%" "%GETPIP%" !PIP_EXTRA_ARGS!
+    if errorlevel 1 ( echo [ERROR] pip installation failed & pause & exit /b 1 )
 )
-"%PYTHON_EXE%" "%GETPIP%" !PIP_EXTRA_ARGS!
-if errorlevel 1 ( echo [ERROR] pip installation failed & pause & exit /b 1 )
 echo [OK] pip installed
 "%PYTHON_EXE%" -m pip install --upgrade pip !PIP_MIRROR! !PIP_EXTRA_ARGS!
 
