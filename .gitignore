@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.python-venv/
+python_env/
+
+# 运行时数据（本地聊天记录、上传文件、向量库，不入库）
+/chat.db
+/chat_history.json
+/prompts.json
+/uploads/
+/vector_memory/
+
+# 数据备份（从项目里备份的运行时数据）
+BACKUP_*.zip
+
+# 安装器相关
+/.install_done
+/OllamaSetup.exe
+/get-pip.py
+/python_env.zip
+/Real-ESRGAN.zip
+/patches/
+/_gpuchk/
+
+# 环境变量与密钥
+.env
+*.key
+*.pem
+*.p12
+
+# 日志
+*.log
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>www.Com2AI.com 多图创作助手</title>
+  <link href="{{ url_for('static', filename='assets/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='assets/custom2.css') }}" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+
+</head>
+
+<body>
+
+  <div id="dragDropOverlay">
+    <div class="drag-drop-inner">
+      <div class="drag-drop-title">+</div>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <!-- ── Sidebar ── -->
+      <div class="col-3 col-md-2" id="left">
+        <div class="sidebar-header">
+
+          <div class="hdlogo">Com2AI</div>
+          <!-- <div  class="hdversion">v1.0.0</div> -->
+          <button id="newChatBtn" class="btn btn-primary " >新建对话</button>
+        </div>
+        <div id="history-list" class="history-list"></div>
+      </div>
+
+      <!-- ── Chat ── -->
+      <div class="col-9 col-md-10 cc" id="right">
+        <div class="chat-container flex-column" id="chatContainer">
+          <div class="message ai-message" >上传产品图、场景图、模特图等，输入指令，AI 将为你生成合成结果。</div>
+        </div>
+
+    <div class="input-areab">
+      <div class="row">
+
+
+        <!-- <div class="col-3 col-md-2 ll2">
+
+
+          <div class="sidebar-footer">
+
+
+
+            <div class="sidebar-links">
+              <span class="sidebar-link-text" >获得更多技能/提示词</span>
+              <div class="sidebar-socials">
+                <a href="https://www.youtube.com/@com2ai" target="_blank" title="YouTube">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z" />
+                  </svg>
+                </a>
+                <a href="https://space.bilibili.com/com2ai" target="_blank" title="Bilibili">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M17.8 2.4 20.6 5.2a.8.8 0 0 1-1.1 1.1L16.7 3.5a.8.8 0 0 1 1.1-1.1zm-11.6 0a.8.8 0 0 1 1.1 1.1L4.5 6.3A.8.8 0 0 1 3.4 5.2zM12 4C6.5 4 2 8.1 2 13.2 2 18.2 6.5 22 12 22s10-3.8 10-8.8C22 8.1 17.5 4 12 4zm-3.5 6h1.8v4.5H8.5zm5.2 0h1.8v4.5h-1.8zm-6.9 4.5h9.4v1H6.8z" />
+                  </svg>
+                </a>
+                <a href="https://x.com/com2ai" target="_blank" title="X">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M18.2 2h3.1l-6.8 7.8L22.5 22h-6.3l-4.9-6.4L5.5 22H2.4l7.3-8.3L2 2h6.4l4.4 5.8zm-1.1 18h1.7L7 3.8H5.2z" />
+                  </svg>
+                </a>
+              </div>
+              <select id="settingsLang" class="settings-select"
+                style="width:100px; padding: 4px 6px; border:2px solid #ffb155; border-radius: 3px; background:none; text-align: center; color: #ffb155;">
+                <option value="en">English</option>
+                <option value="zh-CN">简体中文</option>
+              </select>
+
+              <a class="sidebar-copyright" href="https://www.com2ai.com" target="_blank">© 2025 www.com2ai.com</a>
+            </div>
+          </div>
+        </div> -->
+        <div class=" col-12 col-md-12 ii">
+          <div class="input-area">
+            <div class="tools">
+
+              <div class="prompt-dropdown">
+                <button class="btn btn-primary btn-sm" id="skillToggle" title="选择技能">
+                  ✦ <span id="skillToggleLabel"  style="padding-left:4px;">默认</span>
+                </button>
+                <div class="prompt-menu overflow-y-auto overflow-x-hidden" id="skillMenu" style="max-height: 400px;">
+                  <div class="prompt-loading">加载中...</div>
+                </div>
+                <!-- 隐藏的原生 select，作为技能选择的数据源，供其余脚本（chat.js / prompt.js）读取/写入，
+                     保证不改动既有逻辑的前提下，仅替换外观为与"提示词"一致的按钮+菜单样式 -->
+                <select id="skill" style="display:none;">
+                  <option value="" selected>无</option>
+                </select>
+              </div>
+
+
+
+              <div class="prompt-dropdown">
+                <button class="btn btn-primary btn-sm" id="promptToggle" title="提示词预设">
+                  ≡ <span id="skillToggleLabel"  style="padding-left:4px;">提示词</span>
+                </button>
+                <div class="prompt-menu overflow-y-auto overflow-x-hidden" id="promptMenu" style="max-height: 400px;">
+                  <div class="prompt-loading">加载中...</div>
+                </div>
+              </div>
+
+              <div class="chooseimg" id="chooseimg">
+                <input type="file" id="fileUpload"
+                  accept="image/*,.pdf,.txt,.md,.markdown,.docx,.js,.py,.json,.csv,.log,.html,.htm,.xml" multiple />
+                <label for="fileUpload" class="btn btn-primary btn-sm" title="上传图片/文档">
+                  ❏ <span id="skillToggleLabel"  style="padding-left:4px;">上传文件</span>
+                </label>
+              </div>
+
+
+
+
+
+              <style>
+                .element-hidden {
+                  position: absolute !important;
+                  width: 1px !important;
+                  height: 1px !important;
+                  padding: 0 !important;
+                  margin: -1px !important;
+                  overflow: hidden !important;
+                  clip: rect(0, 0, 0, 0) !important;
+                  white-space: nowrap !important;
+                  border-width: 0 !important;
+                }
+                /* 所有参数（数量/种子/比例/画风等）都由所选技能 config.json 里的
+                   custom_params 动态生成。.param-item 用 display:contents
+                   包裹 label+input，自身不参与布局，和输入框共享同一行 flex 布局 */
+                .param-item {
+                  display: contents;
+                }
+              </style>
+              <div class="params-row">
+                <input type="text" id="tupianbx" maxlength="200" style="width:0px; display:none;">
+
+                <!-- 所有参数（数量/种子/比例/画风等）都由所选技能 config.json 里的
+                     custom_params 数组动态生成（key / label / type 均可自由定义），
+                     出现在 custom_params 里才会显示。display:contents 让它们共享
+                     同一行 flex 布局。由 prompt.js 的 renderCustomParams() 渲染 -->
+                <span id="customParamsRow" style="display:contents;"></span>
+              </div>
+
+            </div>
+
+            <p id="yinyonidtgw" class="noshow">
+              <i class="bi bi-arrow-return-right"></i>
+              <span id="yinyonidtg"></span>
+            </p>
+
+
+
+
+            <div class="compose-row">
+              <textarea id="userInput" placeholder="输入你的创作指令...  (Enter 发送，Shift+Enter 换行)" rows="3"
+                ></textarea>
+              <button class="send-btn" id="sendButton" title="发送 (Enter)">
+                <span>➤<span>
+              </button>
+            </div>
+
+            <div id="imagePreviewContainer"></div>
+            <div id="documentPreviewContainer"></div>
+    
+            <script>
+
+              const container = document.getElementById('imagePreviewContainer');
+
+              function updateScrollMode() {
+                console.log(container.scrollWidth)
+
+                if (container.scrollWidth > 600) {
+                  container.classList.add('scrollable');
+                } else {
+                  container.classList.remove('scrollable');
+                }
+              }
+
+              const resizeObserver = new ResizeObserver(() => {
+                updateScrollMode();
+              });
+              resizeObserver.observe(container);
+
+              const mutationObserver = new MutationObserver(() => {
+                updateScrollMode();
+              });
+              mutationObserver.observe(container, { childList: true, subtree: false });
+
+              updateScrollMode();
+
+            </script>
+          </div>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+
+  <script src="{{ url_for('static', filename='assets/js/history.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/chat.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/prompt.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/dragdrop.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/settings.js') }}"></script>
+
+</body>
+
+</html>

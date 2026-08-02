@@ -1,0 +1,27 @@
+{
+    "need_image": false,
+    "label": "qwythos_local",
+    "description": "本地对话模型,负责跟用户进行本地离线问答、日常对话、通用推理，能结合已上传的文档内容和历史对话摘要进行解答。",
+    "is_default": true,
+    "custom_params": [
+        {
+            "key": "numimagese",
+            "label": "数量",
+            "type": "text",
+            "default": "1",
+            "maxlength": 5,
+            "width": 40,
+            "title": "每次出图数量"
+        },
+        {
+            "key": "zhongzi",
+            "label": "种子",
+            "type": "text",
+            "default": "",
+            "maxlength": 20,
+            "width": 80,
+            "placeholder": "随机",
+            "title": "种子"
+        }
+    ]
+}
