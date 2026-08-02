@@ -1,4 +1,4 @@
-﻿<#
+<#
 C2Achat 一键安装脚本（Windows PowerShell）
 
 用法（复制下面任意一行到 PowerShell 回车即可）：
@@ -17,11 +17,11 @@ $ProgressPreference = 'SilentlyContinue'
 
 if ($env:OS -ne 'Windows_NT') {
     Write-Host '[X] 当前仅支持 Windows。' -ForegroundColor Red
-    exit 1
+    return
 }
 if ($PSVersionTable.PSVersion.Major -lt 5) {
     Write-Host '[X] 需要 PowerShell 5.1 或更高版本（Windows 10/11 自带）。' -ForegroundColor Red
-    exit 1
+    return
 }
 
 function Write-Step { param([string]$msg) Write-Host "`n==== $msg ====" -ForegroundColor Cyan }
@@ -76,7 +76,7 @@ if (Test-Path (Join-Path $InstallDir 'app.py')) {
 
     if (-not $downloaded) {
         Write-Fail "项目下载失败，请检查网络后重试，或手动下载 ZIP 解压到 $InstallDir"
-        exit 1
+        return
     }
     Write-OK '项目压缩包下载完成'
 
@@ -85,7 +85,7 @@ if (Test-Path (Join-Path $InstallDir 'app.py')) {
     $top = Get-ChildItem -Path $extractDir -Directory | Select-Object -First 1
     if (-not $top) {
         Write-Fail '解压失败'
-        exit 1
+        return
     }
     Copy-Item -Path (Join-Path $top.FullName '*') -Destination $InstallDir -Recurse -Force
     Write-OK "项目已安装到 $InstallDir"
