@@ -33,12 +33,26 @@ const SAFE_MD_TAGS = new Set([
   'TR','TH','TD','SPAN','DETAILS','SUMMARY','CONTENT','MARK','DEL','INS','SUP','SUB','SMALL'
 ]);
 
+// AI 输出文本规范化：
+// 1. 去掉自定义的 <content> 包裹标签，让正文按标准 Markdown 渲染成 <p> 段落。
+//    （否则正文会成为带首尾换行的裸文本，在 white-space: pre-wrap 下显示成大段空白）
+// 2. 统一换行符 -> trim 掉首尾空白 -> 折叠多余空行（最多保留单个空行 \n\n）。
+function normalizeAiText(content) {
+  if (typeof content !== 'string') return '';
+  let text = content.replace(/<\/?content\s*>/gi, '');
+  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  text = text.trim();
+  text = text.replace(/\n{3,}/g, '\n\n');
+  return text;
+}
+
 function renderMarkdownSafe(content) {
   const container = document.createElement('div');
+  const normalized = normalizeAiText(content);
   if (typeof marked !== 'undefined') {
-    container.innerHTML = marked.parse(content || '');
+    container.innerHTML = marked.parse(normalized || '');
   } else {
-    container.textContent = content || '';
+    container.textContent = normalized || '';
   }
 
   const nodes = [];
@@ -77,6 +91,22 @@ function renderMarkdownSafe(content) {
       node.nodeValue = node.nodeValue.replace(/\n{3,}/g, '\n\n');
     });
   });
+
+  // white-space: pre-wrap 下，块级标签之间只含换行的空白节点也会被渲染成空行，
+  // 造成段落间隔过大。这里移除它们；代码块（pre/code）内的空白保留。
+  const removeBlankLineNodes = (el) => {
+    Array.from(el.childNodes).forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE && /^\s*[\r\n]\s*$/.test(node.nodeValue)) {
+        el.removeChild(node);
+      }
+    });
+  };
+  container.querySelectorAll('*').forEach((el) => {
+    if (el.matches('pre, code')) return;
+    removeBlankLineNodes(el);
+  });
+  removeBlankLineNodes(container);
+
   return container;
 }
 window.renderMarkdownSafe = renderMarkdownSafe;

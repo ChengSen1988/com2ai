@@ -78,8 +78,9 @@ def process_i(**params):
     # 4. 组装最终发给模型的 messages
     messages = build_messages(hot_messages, doc_text, retrieved_context)
 
-    # 5. 注入图片。当前对话模型是纯文本模型（不具备看图能力），
-    #    如果 Ollama 拒绝带图片的请求，第 6 步会自动去掉图片重试一次。
+    # 5. 注入图片。当前模型支持视觉（多模态），图片按原图直接注入，
+    #    依靠较大的 num_ctx（32768）承接多图 token 占用；
+    #    只有 Ollama 明确提示模型不支持图片时，才会去掉图片重试。
     images_b64 = []
     if abs_image_paths:
         for p in abs_image_paths:
@@ -109,7 +110,7 @@ def process_i(**params):
                 "top_p": 0.95,
                 "top_k": 20,
                 "repeat_penalty": 1.05,
-                "num_ctx": 8192,
+                "num_ctx": 32768,
             },
         }
 
@@ -122,10 +123,13 @@ def process_i(**params):
     try:
         response = requests.post(url, json=payload, stream=True, timeout=60)
         if response.status_code != 200 and images_b64:
-            # 模型不支持图片时去掉图片重试一次，保证对话不中断
-            log.warning(f"Ollama 返回状态码 {response.status_code}，可能不支持图片；已去掉图片重试")
-            payload = make_payload(False)
-            response = requests.post(url, json=payload, stream=True, timeout=60)
+            # 只有 Ollama 明确提示模型不支持图片时，才去掉图片重试；
+            # 其它错误（图片过大、上下文超限等）如实报错，
+            # 避免模型在没收到图的情况下"假装没收到图"。
+            err_text = (response.text or "").lower()
+            if "image" in err_text or "vision" in err_text:
+                payload = make_payload(False)
+                response = requests.post(url, json=payload, stream=True, timeout=60)
         if response.status_code != 200:
             yield "text", f"\n[错误] Ollama 返回状态码 {response.status_code}"
             return
