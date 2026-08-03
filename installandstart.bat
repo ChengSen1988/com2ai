@@ -245,39 +245,60 @@ echo.
 :: ============================================================
 :: PyTorch installation
 :: ============================================================
-if "!GPU_MODE!"=="CUDA" (
-    if "!NET_MODE!"=="CN" (
-        set TORCH_MIRROR=https://mirrors.aliyun.com/pytorch-wheels/!CUDA_TAG!
-        echo  - Installing PyTorch ^(!CUDA_TAG!^) from Aliyun mirror...
-        "%PIP_EXE%" install !TORCH_PKGS! -f !TORCH_MIRROR! !PIP_EXTRA_ARGS!
-    ) else (
-        set TORCH_INDEX_URL=https://download.pytorch.org/whl/!CUDA_TAG!
-        echo  - Installing PyTorch ^(!CUDA_TAG!^): !TORCH_PKGS!
-        "%PIP_EXE%" install !TORCH_PKGS! --index-url !TORCH_INDEX_URL! !PIP_EXTRA_ARGS!
-    )
-    if errorlevel 1 (
-        echo [WARN] CUDA version failed to install. Falling back to CPU version...
-        if "!NET_MODE!"=="CN" (
-            set TORCH_MIRROR=https://mirrors.aliyun.com/pytorch-wheels/cpu
-            "%PIP_EXE%" install torch torchvision torchaudio -f !TORCH_MIRROR! !PIP_EXTRA_ARGS!
-        ) else (
-            set TORCH_INDEX_URL=https://download.pytorch.org/whl/cpu
-            "%PIP_EXE%" install torch torchvision torchaudio --index-url !TORCH_INDEX_URL! !PIP_EXTRA_ARGS!
-        )
-        set GPU_MODE=CPU
-    ) else ( echo [OK] PyTorch !CUDA_TAG! version installed )
+if "!GPU_MODE!"=="CUDA" goto :torch_cuda
+goto :torch_cpu
+
+:torch_cuda
+set "TORCH_INDEX_URL=https://download.pytorch.org/whl/!CUDA_TAG!"
+call :install_torch
+if errorlevel 1 goto :torch_cuda_fallback
+echo [OK] PyTorch !CUDA_TAG! version installed
+goto :torch_done
+
+:torch_cuda_fallback
+echo.
+echo [WARN] CUDA version of PyTorch failed after 3 attempts. ^(Network issues are common^)
+echo [WARN] Falling back to CPU-only PyTorch. NOTE: GPU acceleration will NOT be enabled.
+echo [WARN] To use the GPU, rerun the installer when the network is stable.
+echo.
+set "TORCH_INDEX_URL=https://download.pytorch.org/whl/cpu"
+call :install_torch
+if errorlevel 1 (
+    echo [ERROR] CPU version of PyTorch also failed to install. Rerun when the network is stable.
 ) else (
-    if "!NET_MODE!"=="CN" (
-        set TORCH_MIRROR=https://mirrors.aliyun.com/pytorch-wheels/cpu
-        echo  - Installing PyTorch CPU version from Aliyun mirror...
-        "%PIP_EXE%" install torch torchvision torchaudio -f !TORCH_MIRROR! !PIP_EXTRA_ARGS!
-    ) else (
-        set TORCH_INDEX_URL=https://download.pytorch.org/whl/cpu
-        echo  - Installing PyTorch CPU version...
-        "%PIP_EXE%" install torch torchvision torchaudio --index-url !TORCH_INDEX_URL! !PIP_EXTRA_ARGS!
-    )
     echo [OK] PyTorch CPU version installed
 )
+set GPU_MODE=CPU
+goto :torch_done
+
+:torch_cpu
+set "TORCH_INDEX_URL=https://download.pytorch.org/whl/cpu"
+call :install_torch
+if errorlevel 1 (
+    echo [ERROR] PyTorch CPU version failed to install. Rerun when the network is stable.
+) else (
+    echo [OK] PyTorch CPU version installed
+)
+goto :torch_done
+
+:torch_done
+goto :torch_routines_end
+
+:: Install the pinned PyTorch versions from the official index, up to 3 attempts.
+:install_torch
+setlocal
+set /a TORCH_TRY=0
+:torch_retry
+set /a TORCH_TRY+=1
+echo  - Installing PyTorch from !TORCH_INDEX_URL!... ^(attempt !TORCH_TRY!/3^)
+"%PIP_EXE%" install !TORCH_PKGS! --index-url !TORCH_INDEX_URL! !PIP_EXTRA_ARGS!
+if !errorlevel! equ 0 exit /b 0
+echo [WARN] Attempt !TORCH_TRY!/3 failed, retrying...
+if !TORCH_TRY! GEQ 3 exit /b 1
+timeout /t 5 /nobreak >nul
+goto :torch_retry
+
+:torch_routines_end
 
 :: Step 6: Install dependencies
 echo.
