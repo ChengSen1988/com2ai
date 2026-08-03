@@ -4,7 +4,7 @@
 
 一个本地运行的 AI 对话框架。
 核心是一个聊天界面 + 可插拔的「技能」（Skill）系统：技能决定了 AI 能做什么——可以是纯对话、文生图、文档分析、代码执行……完全由你自己定义。
-项目内置了对话和文生图两个示例技能，其余能力按需增删，不需要改框架代码。
+项目内置了对话、文生图、图生图三个示例技能，其余能力按需增删，不需要改框架代码。
 
 ## 核心特性
 
@@ -13,6 +13,7 @@
 - **内置示例技能**：
   - `qwythos9b`：本地 AI 对话（Ollama，纯离线，支持带思考过程的流式输出）
   - `text2img`：文生图（ZImage Turbo GGUF + LoRA 画风，支持比例/种子/数量等参数）
+  - `img2img`：图生图 / 图片编辑（Flux 2 Klein 4B GGUF，上传图片后可去水印、精修、换背景等）
 - 文档 / 图片上传：对话可结合已上传内容回答
 - 长期记忆：Chroma 向量检索历史对话，跨会话回忆
 - 对话历史管理：本地保存、新建/删除/切换对话
@@ -37,6 +38,7 @@ skills/my_skill/
 
 - Windows （脚本针对 Windows 编写）
 - 建议 NVIDIA 显卡（无显卡时自动回退 CPU）
+- 所有示例技能在 NVIDIA 最低 8GB 显存下运行也非常良好
 - 首次安装需要联网（约 5–20 分钟）
 
 ## 快速开始
@@ -68,6 +70,7 @@ irm https://raw.githubusercontent.com/ChengSen1988/com2ai/main/install.ps1 | iex
 | 嵌入模型 | `nomic-embed-text` | Ollama | qwythos9b（记忆功能） |
 | 文生图主模型 | `csssss/com2ai-zimage-gguf` | Hugging Face | text2img |
 | 文生图 LoRA | `csssss/com2ai-zimage-lora` | Hugging Face | text2img |
+| 图生图主模型 | `csssss/com2ai-klein-4b` | Hugging Face | img2img |
 
 文生图模型首次使用时自动从 Hugging Face 下载（约几 GB），缓存到本地后离线可用。
 

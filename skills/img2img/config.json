@@ -1,0 +1,33 @@
+{
+  "need_image": true,
+  "allow_image": true,
+  "label": "i2i Image Edit",
+  "description": "Edit and retouch images (image-to-image).",
+  "is_default": false,
+  "custom_params": [
+
+   {
+      "key": "count",
+      "label": "count",
+      "type": "text",
+      "default": "1",
+      "maxlength": 5,
+      "width": 40,
+      "title": ""
+    },
+    {
+      "key": "seed",
+      "label": "seed",
+      "type": "text",
+      "default": "",
+      "maxlength": 20,
+      "width": 80,
+      "placeholder": "random",
+      "title": "seed"
+    }
+
+    
+  ]
+
+}
+

@@ -4,7 +4,7 @@ English | [中文](README.md)
 
 A locally running AI chat framework.
 
-At its core is a chat interface + a pluggable "Skill" system: skills determine what the AI can do - plain chat, text-to-image, document analysis, code execution... entirely up to you. The project ships with two example skills (chat and text-to-image); everything else can be added or removed as needed without touching the framework code.
+At its core is a chat interface + a pluggable "Skill" system: skills determine what the AI can do - plain chat, text-to-image, image-to-image, document analysis, code execution... entirely up to you. The project ships with three example skills (chat, text-to-image and image-to-image); everything else can be added or removed as needed without touching the framework code.
 
 ## Core Features
 
@@ -13,6 +13,7 @@ At its core is a chat interface + a pluggable "Skill" system: skills determine w
 - **Built-in example skills**:
   - `qwythos9b`: local AI chat (Ollama, fully offline, with streaming output including the thinking process)
   - `text2img`: text-to-image (ZImage Turbo GGUF + LoRA styles, with ratio / seed / count parameters)
+  - `img2img`: image-to-image / photo editing (Flux 2 Klein 4B GGUF - remove watermarks, retouch, replace backgrounds, and more)
 - Document / image upload: the conversation can answer based on uploaded content
 - Long-term memory: Chroma vector search over past conversations, recall across sessions
 - Conversation history management: saved locally, create / delete / switch conversations
@@ -37,6 +38,7 @@ skills/my_skill/
 
 - Windows (the scripts are written for Windows)
 - NVIDIA GPU recommended (automatically falls back to CPU)
+- All example skills run very well on NVIDIA GPUs with at least 8 GB VRAM
 - Network required for the first install (about 5-20 minutes)
 
 ## Quick Start
@@ -66,6 +68,7 @@ The installer also creates a `C2Achat` desktop shortcut automatically (icon: `ic
 | Embedding model | `nomic-embed-text` | Ollama | qwythos9b (memory) |
 | Text-to-image base model | `csssss/com2ai-zimage-gguf` | Hugging Face | text2img |
 | Text-to-image LoRA | `csssss/com2ai-zimage-lora` | Hugging Face | text2img |
+| Image-to-image model | `csssss/com2ai-klein-4b` | Hugging Face | img2img |
 
 The text-to-image model is downloaded automatically from Hugging Face on first use (a few GB) and works offline once cached locally.
 

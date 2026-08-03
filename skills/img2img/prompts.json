@@ -1,0 +1,47 @@
+[
+  {
+    "duotuhecheng": false,
+    "label": "Remove Watermark",
+    "mozi": false,
+    "prompt": "remove waterwark from this image，保持饱和度和亮度以及色彩不变",
+    "skill": "img2img",
+    "customParams": {
+      "seed": "26067155"
+    }
+  },
+  {
+    "duotuhecheng": false,
+    "label": "Hardware Retouch",
+    "prompt": "Remove all surface contaminants,dust, fingerprints,smudges,and eliminate image noise/grain;Transform to profession-style photography style,while keeping the original material,color scheme,angle,shape;smooth the edges to eliminate jaggedness;high resolution",
+    "skill": "img2img",
+    "customParams": {
+      "count": "1",
+      "seed": ""
+    }
+  },
+  {
+    "duotuhecheng": false,
+    "label": "Remove Text",
+    "prompt": "去除图片上的文字，保持饱和度和亮度以及色彩不变",
+    "skill": "img2img",
+    "customParams": {
+      "count": "1",
+      "seed": ""
+    }
+  },
+  {
+    "duotuhecheng": false,
+    "label": "Watch Case Retouch",
+    "prompt": "对产品进行高端电商级精修，保持产品真实结构与比例不变，不改变产品外形和接口位置。\n\n修图要求：\n- 白色纯净背景（#FFFFFF）\n- 保持真实商品细节，不能AI乱改结构\n- 产品边缘清晰锐利，金属与塑料材质质感真实\n- 屏幕区域呈现高级黑玻璃质感，微弱反射，高级感\n- 排线、电路板细节清晰，颜色干净，避免脏污感\n- 去除噪点、灰尘、划痕、杂边\n- 提升整体清晰度与通透感\n- 增加轻微立体阴影（自然软阴影），增强悬浮感\n- 光线均匀，棚拍级柔光\n- 高端3C数码配件电商风格\n- 极简、专业、干净、可信赖\n- 保持淘宝/拼多多/京东主图风格，白底高转化率\n- 细节锐化但不过度，避免塑料感和AI假感\n- 真实摄影级效果，商业产品精修，premium e-commerce product retouching\n\n风格关键词：\nclean white background, premium product retouching, studio lighting, soft shadow, realistic material, sharp details, high-end consumer electronics, commercial photography, minimalism, realistic texture, glossy black surface\nstrictly preserve original product shape and structure,\ndo not redesign the product,\nkeep all connectors, flex cables and dimensions unchanged",
+    "skill": "img2img",
+    "customParams": {
+      "count": "1",
+      "seed": ""
+    }
+  },
+  {
+    "label": "White Background",
+    "prompt": "Product photo retouching: DO NOT alter the product itself - preserve every detail exactly: shape, color, text markings, surface texture, edges, screw holes, metal contacts. Only remove the gray foam background and replace with clean white. Add a subtle natural drop shadow. E-commerce catalog style. Photorealistic, high fidelity",
+    "skill": "img2img"
+  }
+]
