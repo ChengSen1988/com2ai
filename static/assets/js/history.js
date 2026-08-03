@@ -150,7 +150,7 @@
   function createNewConversation(autoLoad = false) {
     const newConversation = {
       id: Date.now().toString() + "_" + Math.random().toString(36).slice(2, 6),
-      title: "新对话",
+      title: "New Chat",
       messages: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -189,15 +189,15 @@
 
     if (role === "user") {
       const isDefaultTitle = !conversation.title
-        || conversation.title === "新对话"  
+        || conversation.title === "New Chat"
         || conversation.title.trim() === "";
       if (isDefaultTitle) {
         if (text && text.trim() !== "") {
           conversation.title = text.substring(0, 20);
         } else if (images && images.length > 0) {
-          conversation.title = "包含图片的对话";
+          conversation.title = "Chat with images";
         } else {
-          conversation.title = "未命名对话";
+          conversation.title = "Untitled Chat";
         }
       }
     }
@@ -278,7 +278,7 @@ if (render && conversationId === currentConversationId && window.displayMessage)
           imgBoxx.classList.add('message-imagex');
 
           const yinyong = document.createElement('div');
-          yinyong.innerText = "引用";
+          yinyong.innerText = "Quote";
           yinyong.classList.add('yinyong');
           yinyong.addEventListener('click', () => {
             if (window.addImagePreviewFromBase64) {
@@ -365,7 +365,7 @@ if (render && conversationId === currentConversationId && window.displayMessage)
       }
 
       const titleElement = document.createElement("div");
-      titleElement.textContent = conversation.title || "未命名对话";
+      titleElement.textContent = conversation.title || "Untitled Chat";
       if (conversation.processing) {
         titleElement.style.color = "#000000";
         titleElement.style.opacity = "1";
@@ -435,13 +435,13 @@ if (render && conversationId === currentConversationId && window.displayMessage)
         if (detail.updatedAt) conversation.updatedAt = detail.updatedAt;
         // 如果 messages 仍为空，留空数组
       } catch (err) {
-        console.error("加载对话详情失败:", err);
+        console.error("Failed to load conversation detail:", err);
         // 若加载失败，确保 messages 为空数组，避免后续 forEach 报错
         conversation.messages = [];
         // 显示错误提示
         const chatContainer = document.getElementById("chatContainer");
         if (chatContainer) {
-          chatContainer.innerHTML = `<div class="message ai-message">⚠️ 加载对话失败，请刷新重试</div>`;
+          chatContainer.innerHTML = `<div class="message ai-message">⚠️ Failed to load conversation. Please refresh and try again.</div>`;
         }
         renderConversationList();
         return;
@@ -463,7 +463,7 @@ if (render && conversationId === currentConversationId && window.displayMessage)
       // 空对话显示欢迎消息
       const welcome = document.createElement("div");
       welcome.className = "message ai-message";
-      welcome.textContent = "开始新的对话吧！";
+      welcome.textContent = "Start a new conversation!";
       chatContainer.appendChild(welcome);
     }
 
@@ -492,7 +492,7 @@ if (render && conversationId === currentConversationId && window.displayMessage)
       newChatButton.onclick = function () {
         const newConv = createNewConversation(true);
         if (window.displayMessage) {
-          window.displayMessage("开始新的对话吧！", [], false);
+          window.displayMessage("Start a new conversation!", [], false);
         }
       };
     }

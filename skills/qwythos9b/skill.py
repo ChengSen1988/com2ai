@@ -131,7 +131,7 @@ def process_i(**params):
                 payload = make_payload(False)
                 response = requests.post(url, json=payload, stream=True, timeout=60)
         if response.status_code != 200:
-            yield "text", f"\n[错误] Ollama 返回状态码 {response.status_code}"
+            yield "text", f"\n[Error] Ollama returned status code {response.status_code}"
             return
 
         for line in response.iter_lines():
@@ -161,7 +161,7 @@ def process_i(**params):
 
     except Exception as exc:
         log.error("LLM 调用失败: %s", exc)
-        yield "text", f"\n[错误] 调用失败: {exc}"
+        yield "text", f"\n[Error] Call failed: {exc}"
         return
 
     # 7. AI 回复落库 + 索引。

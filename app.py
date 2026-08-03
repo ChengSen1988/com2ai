@@ -274,7 +274,7 @@ def process_is():
             return jsonify({"error": "无效的 conversationId"}), 400
         conv_folder = get_conv_folder(conversation_id)
 
-        num_images_str = request.form.get("numimages", "").strip()
+        num_images_str = request.form.get("count", "").strip()
         try:
             num_images = int(num_images_str) if num_images_str else 1
         except ValueError:
@@ -282,11 +282,11 @@ def process_is():
         num_images = max(1, min(num_images, 20))  # 限制单次出图数量，防止资源被耗尽
 
         pending_message_id = request.form.get("pendingMessageId")
-        zhongzi_str = request.form.get("zhongzi", "").strip()
+        seed_str = request.form.get("seed", "").strip()
         try:
-            zhongzi = int(zhongzi_str) if zhongzi_str else None
+            seed = int(seed_str) if seed_str else None
         except ValueError:
-            zhongzi = None
+            seed = None
 
         skill = request.form.get("skill", "").strip()
         if not skill:
@@ -320,7 +320,10 @@ def process_is():
                 module = skill_registry.load_skill_module(skill)
 
                 for i in range(num_images):
-                    seed = int(zhongzi) if zhongzi else random.randint(1, 4294967295)
+                    # 注意：不能用 `seed = int(seed) ...`，那会让 seed 变成 generate()
+                    # 的局部变量，右侧引用未赋值的局部变量会报 UnboundLocalError。
+                    # 用独立变量 cur_seed：用户填了种子则所有图共用，没填则每张图随机。
+                    cur_seed = seed if seed is not None else random.randint(1, 4294967295)
                     # 把多图循环的当前轮次传给技能，聊天技能只在第 1 轮落库，
                     # 避免同一轮生成把同一条消息重复写进数据库/向量库
                     params["_iter_index"] = [str(i)]
@@ -329,7 +332,7 @@ def process_is():
                         **params
                     )
                     for restype, result in result_gen:
-                        for event in out(restype, result, seed, conv_folder, conversation_id, pending_message_id, i):
+                        for event in out(restype, result, cur_seed, conv_folder, conversation_id, pending_message_id, i):
                             yield event
 
                 yield f"data: {json.dumps({'done': True, 'pendingMessageId': pending_message_id})}\n\n"

@@ -55,7 +55,7 @@ function renderSkillMenu() {
   if (!skillOptions || skillOptions.length === 0) {
     const empty = document.createElement("div");
     empty.classList.add("prompt-empty");
-    empty.textContent = "暂无技能";
+    empty.textContent = "No skills";
     SKILL_MENU_ELEMENT.appendChild(empty);
     return;
   }
@@ -100,7 +100,7 @@ function syncSkillToggleUI() {
       const first = skillOptions.find(s => s.is_default) || skillOptions[0];
       SKILL_TOGGLE_LABEL_ELEMENT.textContent = first
         ? (typeof first === 'string' ? first : first.label)
-        : '默认';
+        : 'Default';
     } else {
       const match = (skillOptions || []).find(s => (typeof s === 'string' ? s : s.value) === value);
       SKILL_TOGGLE_LABEL_ELEMENT.textContent = match ? (typeof match === 'string' ? match : match.label) : value;
@@ -294,7 +294,7 @@ async function loadPromptsFromServer() {
     renderPromptMenu();
   } catch (error) {
     console.error("prompt load error:", error);
-    PROMPT_MENU_ELEMENT.innerHTML = `<div class='prompt-error'>${_t('promptLoadError')}</div>`;
+    PROMPT_MENU_ELEMENT.innerHTML = `<div class='prompt-error'>Failed to load prompts.</div>`;
   }
 }
 
@@ -306,7 +306,7 @@ async function savePromptsToServer() {
       body: JSON.stringify(globalPromptList)
     });
   } catch (error) {
-    alert(_t('promptSaveFail') + (error.message || JSON.stringify(error)));
+    alert("Failed to save prompts: " + (error.message || JSON.stringify(error)));
   }
 }
 
@@ -379,11 +379,11 @@ function renderPromptMenu() {
   const hasAnyForCurrentSkill = globalPromptList.some(p => (p.skill || '') === currentSkill);
 
   if (globalPromptList.length === 0) {
-    PROMPT_MENU_ELEMENT.innerHTML = `<div class='prompt-empty'>${_t('promptEmpty')}</div>`;
+    PROMPT_MENU_ELEMENT.innerHTML = `<div class='prompt-empty'>No prompts</div>`;
   } else if (!hasAnyForCurrentSkill) {
     const empty = document.createElement("div");
     empty.classList.add("prompt-empty");
-    empty.textContent = _t('promptEmpty');
+    empty.textContent = "No prompts";
     PROMPT_MENU_ELEMENT.appendChild(empty);
   }
 
@@ -448,7 +448,7 @@ function renderPromptMenu() {
     const editButton = document.createElement("button");
     editButton.classList.add("prompt-edit-btn", "col-1");
     editButton.textContent = "∕";
-    editButton.title = _t("editBtnTitle");
+    editButton.title = "Edit prompt";
 
     editButton.addEventListener("click", function(event) {
       event.stopPropagation();
@@ -494,12 +494,12 @@ function renderPromptMenu() {
     const deleteButton = document.createElement("button");
     deleteButton.classList.add("prompt-del-btn", "col-1");
     deleteButton.textContent = "×";
-    deleteButton.title = _t("deleteBtnTitle");
+    deleteButton.title = "Delete prompt";
 
     deleteButton.addEventListener("click", function(event) {
       event.stopPropagation();
       const name = promptItem.label || promptItem.prompt;
-      const confirmMsg = _t("promptDeleteConfirm").replace("{name}", name);
+      const confirmMsg = "Delete this prompt?\n" + name;
       const confirmDelete = confirm(confirmMsg);
       if (!confirmDelete) return;
       globalPromptList.splice(index, 1);
@@ -515,7 +515,7 @@ function renderPromptMenu() {
 
   const addButton = document.createElement("button");
   addButton.classList.add("prompt-add-btn");
-  addButton.innerHTML = _t("promptAddBtn");
+  addButton.innerHTML = "＋ Add Prompt";
 
   addButton.addEventListener("click", function() {
     const modal = createModal();
@@ -526,7 +526,7 @@ function renderPromptMenu() {
       customParams: {},
       onConfirm: (data) => {
         if (!data.text) {
-          alert(_t('promptEmptyAlert'));
+          alert("Prompt cannot be empty.");
           return;
         }
         globalPromptList.push({

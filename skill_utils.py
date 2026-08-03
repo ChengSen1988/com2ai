@@ -2,6 +2,7 @@ import os
 import ast
 import logging
 import base64
+from huggingface_hub import hf_hub_download
 
 log = logging.getLogger("SkillUtils")
 
@@ -70,6 +71,15 @@ def load_file(file_path) -> str:
 def load_image_to_base64(image_path: str) -> str:
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode("utf-8")
+
+
+def hf_download_local_first(repo_id: str, filename: str) -> str:
+    """Hugging Face 下载统一入口：默认只读本地缓存，本地缺失时才联网获取。
+    避免国内网络无法访问 HF 时，明明本地已有模型却因联网校验而报错。"""
+    try:
+        return hf_hub_download(repo_id=repo_id, filename=filename, local_files_only=True)
+    except Exception:
+        return hf_hub_download(repo_id=repo_id, filename=filename)
 
 
 def build_system_prompt(doc_text: str) -> str:

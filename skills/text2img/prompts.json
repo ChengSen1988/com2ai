@@ -2,9 +2,9 @@
   {
     "customParams": {
       "art_style": "realistic",
-      "negative_prompt": "",
       "bili": "3x4",
       "guidance_scale": "0",
+      "negative_prompt": "",
       "num_steps": "9",
       "numimagese": "",
       "zhongzi": ""

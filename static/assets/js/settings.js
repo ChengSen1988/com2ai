@@ -50,7 +50,7 @@
       const res = await fetch('/api/i18n');
       i18nData  = await res.json();
     } catch (e) {
-      console.warn('无法加载语言包，降级到默认', e);
+      console.warn('Failed to load language pack, falling back to default', e);
       i18nData = {};
     }
 

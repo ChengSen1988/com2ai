@@ -112,7 +112,7 @@ function renderMarkdownSafe(content) {
 window.renderMarkdownSafe = renderMarkdownSafe;
 
 function isErrorContent(content) {
-  return /^(msgErrorPrefix|生成失败|Failed|\s*\[错误\])/.test(content || '');
+  return /^(msgErrorPrefix|Failed|\s*\[Error\])/.test(content || '');
 }
 
 
@@ -222,22 +222,22 @@ function updateSendButtonState() {
     icon.textContent = "︱";
     icon.style.color = "";
     icon.style.animation = "spin 1s linear infinite";
-    sendButtonElement.title = "发送中...";
+    sendButtonElement.title = "Sending...";
   } else if (!allowed && window._skillNeedImage && uploadedImageList.length === 0) {
     icon.textContent = "➤";
     icon.style.color = "";
     icon.style.animation = "";
-    sendButtonElement.title = "需要图片";
+    sendButtonElement.title = "Image required";
   } else if (!allowed) {
     icon.textContent = "➤";
     icon.style.color = "";
     icon.style.animation = "";
-    sendButtonElement.title = "发送";
+    sendButtonElement.title = "Send";
   } else {
     icon.textContent = "➤";
     icon.style.color = "";
     icon.style.animation = "";
-    sendButtonElement.title = "发送";
+    sendButtonElement.title = "Send";
   }
 }
 
@@ -468,7 +468,7 @@ function displayMessage(content, images, isUserMessage, messageId, docs) {
         const imgBoxx = document.createElement("div");
         imgBoxx.classList.add("message-imagex");
         const yinyong = document.createElement("div");
-        yinyong.innerText = "引用";
+        yinyong.innerText = "Quote";
         yinyong.classList.add("yinyong");
         yinyong.addEventListener("click", function abc() {
           if (!uploadedImageList.includes(src)) {
@@ -558,8 +558,8 @@ function displayMessage(content, images, isUserMessage, messageId, docs) {
   const copyBtn = document.createElement("button");
   copyBtn.type = "button";
   copyBtn.className = "copy-btn";
-  copyBtn.title = "复制消息内容";
-  copyBtn.setAttribute("aria-label", "复制消息内容");
+  copyBtn.title = "Copy message";
+  copyBtn.setAttribute("aria-label", "Copy message");
   copyBtn.innerHTML = COPY_ICON_SVG;
   copyBtn.addEventListener("click", () => {
     const text = getMessageTextById(messageId, content);
@@ -596,9 +596,9 @@ window.openFolder = function(path) {
   fetch('/open_folder?path=' + encodeURIComponent(path))
     .then(res => res.json())
     .then(data => {
-      if (!data.success) alert("打开文件夹失败" + data.error);
+      if (!data.success) alert("Failed to open folder: " + data.error);
     })
-    .catch(err => alert("打开文件夹错误"));
+    .catch(err => alert("Failed to open folder"));
 };
 
 async function handleSendMessage() {
@@ -641,10 +641,10 @@ async function handleSendMessage() {
         if (upData.success) {
           uploadedPaths = uploadedPaths.concat(upData.paths || []);
         } else {
-          throw new Error(upData.error || "上传失败");
+          throw new Error(upData.error || "Upload failed");
         }
       } catch (e) {
-        displayMessage("上传失败" + e.message, [], false);
+        displayMessage("Upload failed: " + e.message, [], false);
         pendingRequestCount = 0;
         window.ChatHistorySystem.setConversationProcessing(convId, false);
         updateSendButtonState();
@@ -664,16 +664,16 @@ async function handleSendMessage() {
       const docRes = await fetch("/upload_doc", { method: "POST", body: docFormData });
       const docData = await docRes.json();
       if (!docData.success) {
-        throw new Error(docData.error || "上传失败");
+        throw new Error(docData.error || "Upload failed");
       }
 
       // 收集后端返回的文档路径
       uploadedDocPaths = docData.docs; // docs 是路径字符串数组
       // 控制台打印路径，方便调试
-      console.log("本次上传文档路径列表：", uploadedDocPaths);
+      console.log("Uploaded document paths:", uploadedDocPaths);
 
     } catch (e) {
-      displayMessage("上传失败" + e.message, [], false);
+      displayMessage("Upload failed: " + e.message, [], false);
       pendingRequestCount = 0;
       window.ChatHistorySystem.setConversationProcessing(convId, false);
       updateSendButtonState();
@@ -688,7 +688,7 @@ async function handleSendMessage() {
   const pendingId = window.ChatHistorySystem.addMessageById(
     convId,
     "ai_pending",
-    "处理中...",
+    "Processing...",
     [],
     true
   );
@@ -721,7 +721,7 @@ async function handleSendMessage() {
       fd.append("docPaths[]", docPath);
     });
 
-    console.log("最终发给后端的docPaths[]：", uploadedDocPaths);
+    console.log("Final docPaths[] sent to backend:", uploadedDocPaths);
 
     const response = await fetch("/process", {
       method: "POST",
@@ -791,8 +791,8 @@ async function handleSendMessage() {
             }
             else if (data.error) {
               const errMsg = data.error_detail
-                ? `[错误] ${data.error}\n\n${data.error_detail}`
-                : `[错误] ${data.error}`;
+                ? `[Error] ${data.error}\n\n${data.error_detail}`
+                : `[Error] ${data.error}`;
               window.ChatHistorySystem.updateMessageById(
                 convId, pendingId, "ai", errMsg, undefined
               );
@@ -811,7 +811,7 @@ async function handleSendMessage() {
     }
   } catch (err) {
     console.log(err);
-    window.ChatHistorySystem.updateMessageById(convId, pendingId, "ai", _t("msgNetworkError") + err.message, []);
+    window.ChatHistorySystem.updateMessageById(convId, pendingId, "ai", "Network error: " + err.message, []);
   } finally {
     pendingRequestCount = 0;
     window.ChatHistorySystem.setConversationProcessing(convId, false);

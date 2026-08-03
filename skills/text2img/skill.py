@@ -13,6 +13,7 @@ from diffusers import ZImagePipeline, ZImageTransformer2DModel, GGUFQuantization
 from transformers import AutoTokenizer, AutoModelForCausalLM 
 
 from huggingface_hub import hf_hub_download
+from skill_utils import hf_download_local_first
 
 
 
@@ -109,13 +110,13 @@ def process_i(
 **params
 ):
 
-    zhongzi_val = params.get('zhongzi', [''])[0]
+    zhongzi_val = params.get('seed', [''])[0]
     seed = int(zhongzi_val) if zhongzi_val and zhongzi_val.strip() else random.randint(1, 999999999)
     # seed = int(zhongzi) if zhongzi is not None else random.randint(1, 999999999)
     generator = torch.Generator(device=device).manual_seed(seed)
-    bili = params.get('bili', ['1x1'])[0]
+    bili = params.get('size', ['1x1'])[0]
     prompt = params.get('prompt', [''])[0]
-    lora = params.get('art_style', [''])[0]
+    lora = params.get('lora', [''])[0]
 
 
     restype='png'
@@ -134,13 +135,13 @@ def process_i(
 
 
         if lora=="moreDetail":
-            lora_path0 = hf_hub_download(
-                repo_id="csssss/com2ai-zimage-lora",
-                filename="MidJourney-Style-v001.safetensors",
-             )
-            lora_path2 = hf_hub_download(
-                repo_id="csssss/com2ai-zimage-lora",
-                filename="moreDetail-v001.safetensors",
+            lora_path0 = hf_download_local_first(
+                "csssss/com2ai-zimage-lora",
+                "MidJourney-Style-v001.safetensors",
+            )
+            lora_path2 = hf_download_local_first(
+                "csssss/com2ai-zimage-lora",
+                "moreDetail-v001.safetensors",
             )
             pipeline.load_lora_weights(str(lora_path0), adapter_name="ziamgelora0")
             pipeline.load_lora_weights(str(lora_path2), adapter_name="ziamgelora2")

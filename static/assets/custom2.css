@@ -1,21 +1,44 @@
 :root {
-  --fc:  #ffffff;
-  --dd:   #dddddd;
-  --ee:  #ffffff;
-  --aa:     #aaaaaa;
-  --hei:     #ffffff;
-  --qianhei: #3d3d44;
-  --lv:       #fd9e00;
-  --qianlv:  #f6a725;
-  --blue:         #3b82f6;
+  /* Base neutrals */
+  --fc:  #ffffff;              /* page background */
+  --dd:  #e6e9f2;              /* light border / divider */
+  --ee:  #ffffff;              /* surface */
+  --aa:  #9aa1b0;              /* muted text / placeholder */
+  --hei: #ffffff;              /* text on accent (white) */
+  --qianhei: #5a6172;          /* secondary text */
+
+  /* Unified brand accent (blue) — old orange accents replaced */
+  --lv:           #416afe;
+  --qianlv:       #2f54d6;
+  --blue:         #416afe;
+  --accent:       #416afe;
+  --accent-hover: #2f54d6;
+  --accent-soft:  #e3edfd;
+  --accent-dim:   #c9d7fb;
   --red:          #ef4444;
+  --success:      #22a06b;
+
+  /* Surfaces / borders / text tokens (used across the UI and prompt modal) */
+  --bg-base:      #ffffff;
+  --bg-surface:   #ffffff;
+  --bg-elevated:  #ffffff;
+  --bg-hover:     #f2f5fd;
+  --input-bg:     #f6f8fc;
+  --border:       #e6e9f2;
+  --border-focus: #416afe;
+  --text-primary:   #10131a;
+  --text-secondary: #5a6172;
+  --text-muted:     #9aa1b0;
+  --text-dim:       #b8bfcc;
+
+  /* Fonts / radii / shadows */
   --font-mono:    'Inter', system-ui, sans-serif;
   --font-ui:      'Inter', system-ui, sans-serif;
   --radius-sm:    4px;
   --radius:       8px;
   --radius-lg:    13px;
-  --shadow-sm:    0 1px 3px rgba(0,0,0,0.4);
-  --shadow:       0 4px 12px rgba(0,0,0,0.5);
+  --shadow-sm:    0 1px 3px rgba(16,19,26,0.08);
+  --shadow:       0 4px 16px rgba(16,19,26,0.12);
   --transition:   0.15s ease;
 }
 
@@ -28,7 +51,7 @@ html, body {
   height: 100vh;
   overflow: hidden;
   background: var(--fc);
-  color: var(--hei);
+  color: var(--text-primary);
   font-family: var(--font-ui);
   font-size: 14px;
   line-height: 1.5;
@@ -124,7 +147,7 @@ html, body {
 .history-item {
   padding: 9px 10px;
   margin-bottom: 4px;
-  background: #f5f5f5;
+  background: var(--bg-hover);
   /* border: 1px solid #aaaaaa; */
   border-radius:3px;
   cursor: pointer;
@@ -136,7 +159,7 @@ html, body {
 }
 
 .history-item.active {
-  background: #e4edfd;
+  background: var(--accent-soft);
   color: #416afe;
   font-size: 13px;
 }
@@ -286,7 +309,7 @@ transform-origin: center center;
 .user-message {
   padding: 10px 14px; 
 
-  background: #e3edfd;
+  background: var(--accent-soft);
   color: #000000;
   align-self: flex-end;
   border-top-right-radius: 0;
@@ -387,11 +410,10 @@ transform-origin: center center;
 }
 
 .yinyong {
-  font-size: 13px;
+  font-size: 10px;
   font-family: var(--font-mono);
-  text-align: right;
-  padding: 0;
-  padding-left: 12px;
+  text-align: center;
+  padding: 3px 6px; 
   cursor: pointer;
   color:#111111; 
   border: 1px solid var(--border);
@@ -594,7 +616,7 @@ transform-origin: center center;
   width: calc(100% - 16px);
   margin: 8px;
   padding: 8px;
-  background: #ffb554;
+  background: var(--accent);
   border: 1px dashed var(--border);
   border-radius: var(--radius);
   color: #000000;
@@ -753,7 +775,7 @@ transform-origin: center center;
 }
 
 .compose-row:focus-within {
-  border-color: #007aff;
+  border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(84, 143, 231, 0.06);
 }
 
@@ -827,7 +849,7 @@ textarea#userInput::placeholder { color: var(--aa); border: none; }
 /* .send-btn:hover:not(:disabled) { background: #007aff; } */
 
 .send-btn:disabled {
-  background: #e3edfd;
+  background: var(--accent-soft);
   color: #ccc;
   cursor: not-allowed;
 }
@@ -836,7 +858,7 @@ textarea#userInput::placeholder { color: var(--aa); border: none; }
 .btn-primary, .btn.btn-primary {
   background:#f0f0f0;
   color: #0f1115 !important;
-  border: 0px solid #007aff;
+  border: 0px solid var(--accent);
   font-family: var(--font-ui) !important;
   font-size: 12px;
   padding: 2px 8px;
@@ -853,7 +875,7 @@ textarea#userInput::placeholder { color: var(--aa); border: none; }
 }
 
 .btn-primary:hover, .btn.btn-primary:hover {
-  background: #e3edfd!important;
+  background: var(--accent-soft) !important;
   color: #416afe !important;
 }
 
@@ -874,7 +896,7 @@ textarea#userInput::placeholder { color: var(--aa); border: none; }
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(14,14,15,0.88);
+  background: rgba(16,19,26,0.5);
   z-index: 999999;
   align-items: center;
   justify-content: center;
@@ -1042,7 +1064,6 @@ textarea#userInput::placeholder { color: var(--aa); border: none; }
 
 } */
 
-.user-message .yinyong{color: #a2bfa3;}
 
 /* 自定义复选框选中背景色 */
 #modalDuotuhecheng:checked ,#duotuhecheng:checked {

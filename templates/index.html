@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>www.Com2AI.com 多图创作助手</title>
+  <title>Com2AI — AI Creation Assistant</title>
   <link href="{{ url_for('static', filename='assets/bootstrap.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='assets/custom2.css') }}" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
@@ -28,7 +28,7 @@
 
           <div class="hdlogo">Com2AI</div>
           <!-- <div  class="hdversion">v1.0.0</div> -->
-          <button id="newChatBtn" class="btn btn-primary " >新建对话</button>
+          <button id="newChatBtn" class="btn btn-primary " >New Chat</button>
         </div>
         <div id="history-list" class="history-list"></div>
       </div>
@@ -36,7 +36,7 @@
       <!-- ── Chat ── -->
       <div class="col-9 col-md-10 cc" id="right">
         <div class="chat-container flex-column" id="chatContainer">
-          <div class="message ai-message" >上传产品图、场景图、模特图等，输入指令，AI 将为你生成合成结果。</div>
+          <div class="message ai-message" >Upload product images, scene photos, or model photos, enter your instructions, and AI will create the result for you.</div>
         </div>
 
     <div class="input-areab">
@@ -87,35 +87,35 @@
             <div class="tools">
 
               <div class="prompt-dropdown">
-                <button class="btn btn-primary btn-sm" id="skillToggle" title="选择技能">
-                  ✦ <span id="skillToggleLabel"  style="padding-left:4px;">默认</span>
+                <button class="btn btn-primary btn-sm" id="skillToggle" title="Select Skill">
+                  ✦ <span id="skillToggleLabel"  style="padding-left:4px;">Default</span>
                 </button>
                 <div class="prompt-menu overflow-y-auto overflow-x-hidden" id="skillMenu" style="max-height: 400px;">
-                  <div class="prompt-loading">加载中...</div>
+                  <div class="prompt-loading">Loading...</div>
                 </div>
                 <!-- 隐藏的原生 select，作为技能选择的数据源，供其余脚本（chat.js / prompt.js）读取/写入，
                      保证不改动既有逻辑的前提下，仅替换外观为与"提示词"一致的按钮+菜单样式 -->
                 <select id="skill" style="display:none;">
-                  <option value="" selected>无</option>
+                  <option value="" selected>None</option>
                 </select>
               </div>
 
 
 
               <div class="prompt-dropdown">
-                <button class="btn btn-primary btn-sm" id="promptToggle" title="提示词预设">
-                  ≡ <span id="skillToggleLabel"  style="padding-left:4px;">提示词</span>
+                <button class="btn btn-primary btn-sm" id="promptToggle" title="Prompt Presets">
+                  ≡ <span id="skillToggleLabel"  style="padding-left:4px;">Prompts</span>
                 </button>
                 <div class="prompt-menu overflow-y-auto overflow-x-hidden" id="promptMenu" style="max-height: 400px;">
-                  <div class="prompt-loading">加载中...</div>
+                  <div class="prompt-loading">Loading...</div>
                 </div>
               </div>
 
               <div class="chooseimg" id="chooseimg">
                 <input type="file" id="fileUpload"
                   accept="image/*,.pdf,.txt,.md,.markdown,.docx,.js,.py,.json,.csv,.log,.html,.htm,.xml" multiple />
-                <label for="fileUpload" class="btn btn-primary btn-sm" title="上传图片/文档">
-                  ❏ <span id="skillToggleLabel"  style="padding-left:4px;">上传文件</span>
+                <label for="fileUpload" class="btn btn-primary btn-sm" title="Upload Image/Document">
+                  ❏ <span id="skillToggleLabel"  style="padding-left:4px;">Upload Files</span>
                 </label>
               </div>
 
@@ -163,9 +163,9 @@
 
 
             <div class="compose-row">
-              <textarea id="userInput" placeholder="输入你的创作指令...  (Enter 发送，Shift+Enter 换行)" rows="3"
+              <textarea id="userInput" placeholder="Type your instructions... (Enter to send, Shift+Enter for a new line)" rows="3"
                 ></textarea>
-              <button class="send-btn" id="sendButton" title="发送 (Enter)">
+              <button class="send-btn" id="sendButton" title="Send (Enter)">
                 <span>➤<span>
               </button>
             </div>
