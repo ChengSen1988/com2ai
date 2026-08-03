@@ -356,7 +356,7 @@ if "!GPU_MODE!"=="CUDA" (
 set "SKIP_MODELS=0"
 if /I "%C2A_SKIP_MODELS%"=="1" set "SKIP_MODELS=1"
 if "%SKIP_MODELS%"=="1" (
-    echo [INFO] Skipping Ollama model download (C2A_SKIP_MODELS=1)
+    echo [INFO] Skipping Ollama model download ^(C2A_SKIP_MODELS=1^)
     goto :after_models
 )
 :: Check admin rights
@@ -375,14 +375,14 @@ set "OLLAMA_PATH=%LOCALAPPDATA%\Programs\Ollama"
 if exist "%OLLAMA_PATH%\ollama.exe" (
     set "OLLAMA_INSTALLED=1"
     set "PATH=%PATH%;%OLLAMA_PATH%"
-    echo [INFO] Ollama found (path: %OLLAMA_PATH%)
+    echo [INFO] Ollama found ^(path: %OLLAMA_PATH%^)
     goto :ollama_check_service
 )
 
 where ollama >nul 2>&1
 if %errorlevel% equ 0 (
     set "OLLAMA_INSTALLED=1"
-    echo [INFO] Ollama found (in PATH)
+    echo [INFO] Ollama found ^(in PATH^)
     goto :ollama_check_service
 )
 
